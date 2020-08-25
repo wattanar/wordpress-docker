@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress
+    container_name: blog_wordpress
+    restart: always
+    ports:
+      - 8888:80
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: example
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./wordpress:/var/www/html
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+
+  db:
+    image: mariadb
+    container_name: blog_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - ./db:/var/lib/mysql
+    ports:
+      - 127.0.0.1:3306:3306
