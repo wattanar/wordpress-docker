@@ -17,6 +17,7 @@ services:
     volumes:
       - ./wordpress:/var/www/html
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ./apache2.conf:/etc/apache2/apache2.conf
 
   db:
     image: mariadb
