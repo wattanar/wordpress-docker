@@ -5,10 +5,11 @@ services:
     depends_on:
       - db
     image: wordpress
-    container_name: blog_wordpress
+    container_name: wordpress_app
     restart: always
     ports:
-      - 8888:80
+      - 80:80
+      - 443:443
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: root
@@ -17,11 +18,10 @@ services:
     volumes:
       - ./wordpress:/var/www/html
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
-      - ./apache2.conf:/etc/apache2/apache2.conf
 
   db:
     image: mariadb
-    container_name: blog_db
+    container_name: wordpress_db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: example
@@ -29,3 +29,15 @@ services:
       - ./db:/var/lib/mysql
     ports:
       - 3306:3306
+      
+  phpmyadmin:
+    depends_on:
+      - db
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 127.0.0.1:8081:80
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: example
